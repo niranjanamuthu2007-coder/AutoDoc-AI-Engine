@@ -1,0 +1,56 @@
+version: '3.8'
+services:
+  # Database Service
+  db:
+    image: postgres:15-alpine
+    container_name: autodoc_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespassword123
+      POSTGRES_DB: autodoc
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+  # Redis Caching Service
+  redis:
+    image: redis:7-alpine
+    container_name: autodoc_redis
+    ports:
+      - "6379:6379"
+    restart: always
+  # Backend Web API Service
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: autodoc_backend
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgrespassword123@db:5432/autodoc
+      - JWT_SECRET=supersecretkeyforautodocalplatformjwttokencreation321!
+      - GOOGLE_CLIENT_ID=
+      - GOOGLE_CLIENT_SECRET=
+      - GEMINI_API_KEY=
+    ports:
+      - "8000:8000"
+    volumes:
+      - backend_storage:/workspace/storage
+    depends_on:
+      - db
+      - redis
+    restart: always
+  # Frontend Client Web Service
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: autodoc_frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: always
+volumes:
+  postgres_data:
+  backend_storage:
