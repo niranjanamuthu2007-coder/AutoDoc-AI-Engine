@@ -1,4 +1,5 @@
 import logging
+import os
 from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -22,13 +23,27 @@ app = FastAPI(
     description="AI-Powered Source Code Intelligence Platform backend engine.",
     version="1.0.0"
 )
-# Set CORS origins
+# Same-origin Vercel routing does not need CORS. These origins cover
+# local Vite (`npm run dev`) and `vercel dev` talking to FastAPI directly.
 origins = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
     "http://localhost:80",
-    "http://localhost"
+    "http://localhost",
+    "http://localhost:3000",
 ]
+origins.extend(
+    origin.strip()
+    for origin in settings.CORS_ORIGINS.split(",")
+    if origin.strip()
+)
+for env_key in ("VERCEL_PROJECT_PRODUCTION_URL", "VERCEL_BRANCH_URL", "VERCEL_URL"):
+    host = os.getenv(env_key)
+    if not host:
+        continue
+    origin = host if host.startswith("http") else f"https://{host}"
+    if origin not in origins:
+        origins.append(origin)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,

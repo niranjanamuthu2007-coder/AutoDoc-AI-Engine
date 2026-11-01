@@ -8,7 +8,6 @@ import {
   MessageSquare, 
   FileDown, 
   LogOut, 
-  Layers, 
   ChevronDown, 
   FolderGit2, 
   Activity 

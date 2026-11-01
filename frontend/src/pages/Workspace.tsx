@@ -17,7 +17,6 @@ export const Workspace: React.FC = () => {
     activeRepo, 
     fetchRepositories, 
     setActiveRepoById, 
-    deleteActiveRepo,
     isLoading: contextLoading 
   } = useRepository();
   const [dragActive, setDragActive] = useState(false);

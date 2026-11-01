@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { useAuth } from '../context/AuthContext';
-// Set base configurations
-axios.defaults.baseURL = 'http://localhost:8000'; // Fallback backend routing URL
+// Same-origin /api/v1 in production (Vercel) and local Vite proxy.
+// Override only when VITE_API_BASE_URL is set to a different API origin.
+axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL ?? '';
 export const setupAxiosInterceptors = (logoutUser: () => void) => {
   // Request interceptor: inject token automatically
   axios.interceptors.request.use(

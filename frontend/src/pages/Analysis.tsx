@@ -4,17 +4,12 @@ import { useRepository } from '../context/RepositoryContext';
 import { Graph } from '../components/Graph';
 import { 
   Search, 
-  Filter, 
   ArrowUpDown, 
   Lock, 
   Unlock, 
-  Code, 
-  ExternalLink, 
-  Play, 
   AlertTriangle, 
   ShieldAlert, 
   Info,
-  ChevronRight,
   BookOpen
 } from 'lucide-react';
 export const Analysis: React.FC = () => {
@@ -226,9 +221,13 @@ export const Analysis: React.FC = () => {
                       </td>
                       <td className="p-4">
                         {ep.auth ? (
-                          <Lock className="w-4 h-4 text-brand-500" title="Auth Guard active" />
+                          <span title="Auth Guard active">
+                            <Lock className="w-4 h-4 text-brand-500" />
+                          </span>
                         ) : (
-                          <Unlock className="w-4 h-4 text-slate-300" title="Public access" />
+                          <span title="Public access">
+                            <Unlock className="w-4 h-4 text-slate-300" />
+                          </span>
                         )}
                       </td>
                       <td className="p-4 text-xs text-slate-400 truncate max-w-[180px]" title={ep.file_path}>
@@ -415,7 +414,7 @@ export const Analysis: React.FC = () => {
                 <div className="flex items-center justify-between bg-slate-900 border border-slate-800 rounded-lg p-3 text-xs text-slate-350">
                   <div className="flex gap-2">
                     <span className="text-slate-500 font-semibold font-mono">ENDPOINT URL</span>
-                    <span className="font-mono text-white">http://localhost:8000{selectedDocsEp.route}</span>
+                    <span className="font-mono text-white">{window.location.origin}{selectedDocsEp.route}</span>
                   </div>
                   <span className="text-[9px] uppercase font-bold text-slate-400">HTTP {selectedDocsEp.method}</span>
                 </div>
